@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ThermoLab converts temperatures between Celsius, Fahrenheit and Kelvin with live validation and absolute zero protection.">
+  <title>ThermoLab | Temperature Converter</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2338bdf8'/%3E%3Cstop offset='1' stop-color='%23ff6b4a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='48' height='48' rx='14' fill='url(%23g)'/%3E%3Crect x='20' y='8' width='8' height='22' rx='4' fill='white'/%3E%3Ccircle cx='24' cy='33' r='7' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-mood="idle">
+
+  <!-- animated background -->
+  <div class="bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><div class="grid"></div><span class="ring r1"></span><span class="ring r2"></span></div>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#ff6b4a"/></linearGradient></defs>
+        <rect width="48" height="48" rx="14" fill="url(#lg)"/>
+        <rect x="19.5" y="8" width="9" height="23" rx="4.5" fill="#fff"/>
+        <circle cx="24" cy="34" r="7.5" fill="#fff"/>
+        <rect x="22" y="17" width="4" height="17" rx="2" fill="#ff6b4a"/>
+        <circle cx="24" cy="34" r="4.5" fill="#ff6b4a"/>
+      </svg>
+      <div><h1 class="brand-name">Thermo<span>Lab</span></h1><p class="brand-tag">Celsius · Fahrenheit · Kelvin — instantly</p></div>
+    </header>
+
+    <section class="panel" aria-label="Temperature converter">
+
+      <!-- LEFT: controls -->
+      <div class="controls">
+        <form id="converter-form" novalidate>
+          <div class="field">
+            <label for="temp-input">Temperature</label>
+            <div class="input-wrap">
+              <input id="temp-input" type="text" inputmode="decimal" autocomplete="off" placeholder="Type a value, e.g. 25" aria-describedby="input-error" aria-invalid="false">
+              <span class="unit-badge" id="unit-badge">°C</span>
+            </div>
+            <p id="input-error" class="error" role="alert" hidden></p>
+          </div>
+
+          <fieldset class="field">
+            <legend>Convert from</legend>
+            <div class="segmented">
+              <input type="radio" id="unit-c" name="unit" value="C" checked><label for="unit-c"><b>°C</b>Celsius</label>
+              <input type="radio" id="unit-f" name="unit" value="F"><label for="unit-f"><b>°F</b>Fahrenheit</label>
+              <input type="radio" id="unit-k" name="unit" value="K"><label for="unit-k"><b>K</b>Kelvin</label>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary" id="convert-btn">Convert <span aria-hidden="true">→</span></button>
+            <button type="button" class="btn btn-ghost" id="clear-btn">Clear</button>
+          </div>
+        </form>
+
+        <div class="presets" aria-label="Quick examples">
+          <p class="mini-title">Quick examples</p>
+          <div class="chips">
+            <button type="button" class="chip" data-value="0" data-unit="C">❄️ Freezing</button>
+            <button type="button" class="chip" data-value="25" data-unit="C">🏠 Room</button>
+            <button type="button" class="chip" data-value="98.6" data-unit="F">🧍 Body</button>
+            <button type="button" class="chip" data-value="100" data-unit="C">♨️ Boiling</button>
+            <button type="button" class="chip" data-value="0" data-unit="K">🧊 Absolute zero</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: thermometer -->
+      <div class="gauge" aria-hidden="true">
+        <div class="thermo" id="thermo" style="--level:6%">
+          <div class="scale">
+            <span class="marker" id="marker">—</span>
+            <span class="tick" style="bottom:0%">−50</span><span class="tick" style="bottom:25%">0</span>
+            <span class="tick" style="bottom:50%">50</span><span class="tick" style="bottom:75%">100</span><span class="tick" style="bottom:100%">150</span>
+          </div>
+          <div class="tube"><div class="liquid"><i class="bub" style="left:18%;--d:4.2s;--w:7px"></i><i class="bub" style="left:46%;--d:5.6s;--w:10px"></i><i class="bub" style="left:70%;--d:3.8s;--w:6px"></i><i class="bub" style="left:32%;--d:6.4s;--w:5px"></i></div><i class="shine"></i></div>
+          <div class="bulb"></div>
+        </div>
+        <p class="status" id="status"><span class="status-emoji">🌡️</span><span id="status-text">Enter a temperature to begin</span></p>
+      </div>
+    </section>
+
+    <!-- RESULTS: all units at once -->
+    <section class="results" id="results" aria-live="polite" aria-label="Conversion results">
+      <article class="result" data-unit="C"><span class="tag">You entered</span><h2>Celsius</h2><p class="value"><output id="out-C">—</output><small>°C</small></p><button type="button" class="copy" data-copy="C">Copy</button></article>
+      <article class="result" data-unit="F"><span class="tag">You entered</span><h2>Fahrenheit</h2><p class="value"><output id="out-F">—</output><small>°F</small></p><button type="button" class="copy" data-copy="F">Copy</button></article>
+      <article class="result" data-unit="K"><span class="tag">You entered</span><h2>Kelvin</h2><p class="value"><output id="out-K">—</output><small>K</small></p><button type="button" class="copy" data-copy="K">Copy</button></article>
+    </section>
+
+    <section class="extras">
+      <div class="history">
+        <div class="extras-head"><h3>Recent conversions</h3><button type="button" class="link" id="clear-history">Clear history</button></div>
+        <ul id="history-list"><li class="empty">Nothing yet — your last conversions will appear here.</li></ul>
+      </div>
+      <details class="formulas">
+        <summary>Show the formulas</summary>
+        <ul>
+          <li><b>°C → °F</b> F = C × 9/5 + 32</li>
+          <li><b>°F → °C</b> C = (F − 32) × 5/9</li>
+          <li><b>°C → K</b> K = C + 273.15</li>
+          <li><b>K → °C</b> C = K − 273.15</li>
+        </ul>
+      </details>
+    </section>
+
+    <footer class="footer">Designed &amp; built by <b>Hisra Khan</b> · Oasis Infobyte Internship · Level 1, Task 3</footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
