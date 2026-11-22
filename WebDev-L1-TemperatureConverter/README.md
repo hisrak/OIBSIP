@@ -1,5 +1,7 @@
 # 🌡️ ThermoLab | Temperature Converter
 
+🚀 Live Demo: https://oibsiptemperatureconverter.vercel.app/
+
 An interactive web tool that converts temperatures between **Celsius, Fahrenheit and Kelvin**, with live input validation and absolute zero protection. An animated thermometer and the page colours react to the temperature you enter.
 
 > **Oasis Infobyte Internship**: Web Development & Designing, Level 1, Task 3
