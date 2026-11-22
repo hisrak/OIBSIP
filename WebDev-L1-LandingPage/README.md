@@ -1,5 +1,7 @@
 # 🚀 NovaFit Landing Page
 
+🚀 Live Demo: https://oibsip-landing-page-phi.vercel.app/
+
 A visually polished, fully responsive static landing page for **NovaFit**, a fictional fitness app. Built with **HTML5 and CSS3 only** (Flexbox + CSS Grid, **no JavaScript**).
 
 > **Oasis Infobyte Internship**: Web Development & Designing, Level 1, Task 1
